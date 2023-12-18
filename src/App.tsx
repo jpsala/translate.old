@@ -1,6 +1,7 @@
 import { TextareaAutosize } from '@mui/base/TextareaAutosize';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Box, Button, Divider } from '@mui/material';
+import { useRef } from 'react';
 import './App.css';
 
 
@@ -17,6 +18,7 @@ const App = () => {
     const [inputString, setInputString] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(false);
     const [chatResponse, setChatResponse] = useState<string>("");
+    const inputRef = useRef<HTMLTextAreaElement>(null);
     const handleSendRequest = async (text: string) => {
         const newMessage: Message = {
             message: text,
@@ -70,14 +72,25 @@ const App = () => {
 
         return response.json();
     }
-
+    useEffect(() => {
+        inputRef && inputRef.current && inputRef.current.focus();
+        const interval = setInterval(() => {
+            inputRef && inputRef.current && inputRef.current.focus();
+        }, 1000)
+        return () => {
+            clearInterval(interval);
+        }
+    }, [])
     return (
         <div className="App">
             <Box sx={{ width: '100vw', height: "100vh", display: "flex",flexDirection: "column"}}>
                 <TextareaAutosize
+                    ref={inputRef}
                     autoFocus
                     disabled={loading}
-                    style={{ flex: .8, resize: "none", fontSize: "1.1Rem", padding: '13px', border: 'none' }}
+                    style={{ 
+                        flex: .8, resize: "none", fontSize: "1.1Rem", padding: '13px',
+                        border: 'none', outline: 'none'}}
                     placeholder="Place your text here"
                     value={inputString}
                     onChange={(e) => setInputString(e.target.value)}
