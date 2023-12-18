@@ -73,6 +73,7 @@ const App = () => {
         return response.json();
     }
     useEffect(() => {
+        console.log('Translate page loaded')
         inputRef && inputRef.current && inputRef.current.focus();
         const interval = setInterval(() => {
             inputRef && inputRef.current && inputRef.current.focus();
